@@ -1,0 +1,113 @@
+<div class="content">
+<h1>Bài 1: CẤU HÌNH ỨNG DỤNG WEB</h1>
+
+<h2>Cài đặt XAMPP cho Windows:</h2>
+
+<h3>Giao diện hoạt động của XAMPP</h3>
+<figure><a href="pages/Bai1/image.png"><img src="pages/Bai1/image.png" alt="Giao diện XAMPP"/></a></figure>
+
+<h2>Truy cập Localhost</h2>
+<figure><a href="pages/Bai1/image%201.png"><img src="pages/Bai1/image%201.png" alt="Truy cập Localhost"/></a></figure>
+
+<h2>Tạo CSDL và bảng</h2>
+<p>Mở <code>http://localhost/phpmyadmin</code> → tạo database <code><strong>users</strong></code> với collation <code><strong>utf8_unicode_ci</strong></code>, rồi tạo 2 bảng theo đúng cấu trúc trong tài liệu (có thể dán trực tiếp các lệnh dưới vào tab SQL).</p>
+<pre><code class="language-sql">-- Bảng users
+CREATE TABLE `users` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(50) COLLATE latin1_swedish_ci NOT NULL,
+  `mail` varchar(50) COLLATE latin1_swedish_ci NOT NULL,
+  `salt` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- Bảng ip
+CREATE TABLE `ip` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `ip` varchar(50) COLLATE latin1_swedish_ci NOT NULL,
+  `count_login` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+</code></pre>
+
+<figure><a href="pages/Bai1/image%202.png"><img src="pages/Bai1/image%202.png" alt="phpMyAdmin - tạo DB"/></a></figure>
+<figure><a href="pages/Bai1/image%203.png"><img src="pages/Bai1/image%203.png" alt="Tạo bảng"/></a></figure>
+<figure><a href="pages/Bai1/image%204.png"><img src="pages/Bai1/image%204.png" alt="Cấu trúc bảng"/></a></figure>
+
+<h2>Chuẩn bị tên miền nội bộ (hosts)</h2>
+<p>Để truy cập 3 site theo yêu cầu bài tập, thêm bản ghi hosts (trên Windows là tệp <code>C:\Windows\System32\drivers\etc\hosts</code>).</p>
+<ul>
+<li>Mở Notepad <strong>Run as Administrator</strong></li>
+<li>Mở tệp: <code>C:\Windows\System32\drivers\etc\hosts</code></li>
+<li>Thêm các dòng:</li>
+</ul>
+<pre><code class="language-plaintext">127.0.0.1   www.abc.com.vn
+127.0.0.1   bulletin.abc.com.vn
+127.0.0.1   hrm.abc.com.vn
+</code></pre>
+<figure><a href="pages/Bai1/image%205.png"><img src="pages/Bai1/image%205.png" alt="Chỉnh sửa hosts"/></a></figure>
+
+<h2>Tạo 3 VirtualHost cho 3 website</h2>
+<p>Trên Windows với XAMPP, các file cấu hình Apache nằm trong <code>C:\xampp\apache\conf\</code>, file vhost ở <code>C:\xampp\apache\conf\extra\httpd-vhosts.conf</code>.</p>
+
+<h3>Bật include vhosts</h3>
+<p>Mở <code>C:\xampp\apache\conf\httpd.conf</code> → đảm bảo dòng sau không bị comment:</p>
+<pre><code class="language-plaintext">Include conf/extra/httpd-vhosts.conf</code></pre>
+<figure><a href="pages/Bai1/image%206.png"><img src="pages/Bai1/image%206.png" alt="Bật include vhosts"/></a></figure>
+
+<h3>Tạo thư mục mã nguồn</h3>
+<ul>
+<li><code>C:\xampp\htdocs\abc\</code></li>
+<li><code>C:\xampp\htdocs\bulletin\</code></li>
+<li><code>C:\xampp\htdocs\hrm\</code></li>
+</ul>
+<p>Mỗi thư mục tạo 1 file <code>index.htm</code> hoặc <code>index.php</code> (ví dụ <code>&lt;?php echo "ABC site"; ?&gt;</code>) để kiểm tra.</p>
+
+<h3>Khai báo VirtualHost</h3>
+<p>Mở <code>C:\xampp\apache\conf\extra\httpd-vhosts.conf</code>, thêm 3 khối:</p>
+<pre><code class="language-plaintext"># www.abc.com.vn
+&lt;VirtualHost *:80&gt;
+    ServerName www.abc.com.vn
+    DocumentRoot "C:/xampp/htdocs/abc"
+    &lt;Directory "C:/xampp/htdocs/abc"&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+    ErrorLog "logs/abc-error.log"
+    CustomLog "logs/abc-access.log" common
+&lt;/VirtualHost&gt;
+
+# bulletin.abc.com.vn
+&lt;VirtualHost *:80&gt;
+    ServerName bulletin.abc.com.vn
+    DocumentRoot "C:/xampp/htdocs/bulletin"
+    &lt;Directory "C:/xampp/htdocs/bulletin"&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+    ErrorLog "logs/bulletin-error.log"
+    CustomLog "logs/bulletin-access.log" common
+&lt;/VirtualHost&gt;
+
+# hrm.abc.com.vn
+&lt;VirtualHost *:80&gt;
+    ServerName hrm.abc.com.vn
+    DocumentRoot "C:/xampp/htdocs/hrm"
+    &lt;Directory "C:/xampp/htdocs/hrm"&gt;
+        AllowOverride All
+        Require all granted
+    &lt;/Directory&gt;
+    ErrorLog "logs/hrm-error.log"
+    CustomLog "logs/hrm-access.log" common
+&lt;/VirtualHost&gt;
+</code></pre>
+<figure><a href="pages/Bai1/image%207.png"><img src="pages/Bai1/image%207.png" alt="Khai báo VirtualHost"/></a></figure>
+
+<h2>Test thử 3 Website</h2>
+<figure><a href="pages/Bai1/image%208.png"><img src="pages/Bai1/image%208.png" alt="Test site 1"/></a></figure>
+<figure><a href="pages/Bai1/image%209.png"><img src="pages/Bai1/image%209.png" alt="Test site 2"/></a></figure>
+<figure><a href="pages/Bai1/image%2010.png"><img src="pages/Bai1/image%2010.png" alt="Test site 3"/></a></figure>
+
+</div>
