@@ -1,0 +1,20 @@
+<div class="content bt3">
+    <h2>Câu 8. Ví dụ sử dụng kiểu String</h2>
+    <div class="card" id="ex8-out"></div>
+  
+    <script>
+      (function () {
+        const out = document.getElementById('ex8-out');
+        if (!out) return;                    
+        const str = "Hello world!";
+        out.innerHTML =
+            str.indexOf("Hello")  + "<br/>" +
+            str.indexOf("World")  + "<br/>" +
+            str.indexOf("world")  + "<br/>" +
+            str.toUpperCase()     + "<br/>" +
+            str.length            + "<br/>" +
+            str.replace("w","W")  + "<br/>";
+      })();
+    </script>
+  </div>
+  

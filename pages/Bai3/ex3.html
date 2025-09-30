@@ -1,0 +1,18 @@
+<div class="content bt3">
+    <h2>Câu 3. Ví dụ sử dụng IF</h2>
+  
+    <form name="bai1" onsubmit="return false;" class="card">
+      <input type="text" name="T1" placeholder="Nhập số nguyên">
+      <input type="button" name="c" value="chay thu" onclick="chay()">
+    </form>
+
+    <script language="javascript">
+      function chay(){
+        var a;
+        a = window.document.bai1.T1.value * 1;    
+        if ((a % 2) == 0) { alert(a + " la so chan "); }
+        else { alert(a + " la so le "); }
+      }
+    </script>
+  </div>
+  

@@ -1,0 +1,22 @@
+<div class="content bt3">
+    <h2>Câu 4. Ví dụ sử dụng đối tượng ngày tháng năm trong JS</h2>
+  
+    <div id="write-here" class="card"></div>
+  
+    <script type="text/javascript" language="javascript">
+      window.documentWriteTarget = document.getElementById('write-here');
+  
+      var d = new Date();
+      var time = d.getHours();
+      if (time < 10) {
+        document.write("<b>Good morning</b>");
+      } else if (time >= 10 && time < 16) {
+        document.write("<b>Good day</b>");
+      } else {
+        document.write("<b>Hello World!</b>");
+      }
+  
+      window.documentWriteTarget = null;
+    </script>
+  </div>
+  

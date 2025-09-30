@@ -1,0 +1,25 @@
+<div class="content bt3">
+    <h2>Câu 6. Ví dụ sử dụng confirm</h2>
+  
+    <div class="card">
+      <input type="button" value="Display a confirm box" onclick="disp_confirm()" />
+    </div>
+    <div id="write-here" class="card"></div>
+  
+    <script type="text/javascript" language="javascript">
+      function disp_confirm(){
+        // mỗi lần bấm mới gán đích ghi
+        window.documentWriteTarget = document.getElementById('write-here');
+  
+        var r = confirm("Press a button");
+        if (r == true) {
+          document.write("You pressed OK!");
+        } else {
+          document.write("You pressed Cancel!");
+        }
+  
+        window.documentWriteTarget = null;
+      }
+    </script>
+  </div>
+  

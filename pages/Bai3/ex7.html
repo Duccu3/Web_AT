@@ -1,0 +1,24 @@
+<div class="content bt3">
+    <h2>Câu 7. Ví dụ sử dụng prompt</h2>
+  
+    <div class="card">
+      <input type="button" value="Display a prompt box" onclick="disp_prompt()" />
+    </div>
+    <div id="write-here" class="card"></div>
+  
+    <script type="text/javascript" language="javascript">
+      function disp_prompt(){
+        window.documentWriteTarget = document.getElementById('write-here');
+  
+        var name = prompt("VUI LONG NHAP TEN CUA BAN", "LE THANH LAM");
+        if (name != null && name != "") {
+          document.write("XIN CHAO " + name + "! How are you today?");
+        } else {
+          document.write(""); // xoá nội dung nếu huỷ
+        }
+  
+        window.documentWriteTarget = null;
+      }
+    </script>
+  </div>
+  

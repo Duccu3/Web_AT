@@ -21,6 +21,14 @@ const DATA = [
       ]}
     ]
   },
+  {
+    group: "Bài thực hành 3",
+    items: [
+      { title: "HTML, CSS và JS", slug: "lab3", pages: [
+        { title: "3.1 Ví dụ mẫu", path: "pages/Bai3/examples.html", css: "assets/css/Lab3.css" },
+      ]}
+    ]
+  },
 
 ];
 
@@ -82,17 +90,15 @@ function executeScripts(root){
     old.remove();
   });
 }
-
-// shim document.write để không phá trang
+// cho phép dùng document.write mà không phá trang
 (function(){
   const nativeWrite = document.write.bind(document);
   document.write = function(html){
     const t = window.documentWriteTarget;
-    if (t) t.insertAdjacentHTML('beforeend', html);
+    if (t) t.insertAdjacentHTML("beforeend", html);
     else nativeWrite(html);
   };
 })();
-
 
 async function loadPageByHash(){
   const url  = new URL(location.hash.slice(1), location.href);

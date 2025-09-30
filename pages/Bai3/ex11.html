@@ -1,0 +1,17 @@
+<div class="content bt3">
+    <h2>Câu 11. Ví dụ khác về cách sử dụng thiết lập thời gian</h2>
+  
+    <form name="lam" class="card" onsubmit="return false;">
+      <input type="button" value="Display timed text!" onclick="timedText()">
+      <input type="text" id="txt">
+    </form>
+  
+    <script>
+      function timedText(){
+        var t1 = setTimeout("window.document.lam.txt.value='2 seconds!'", 2000);
+        var t2 = setTimeout("document.getElementById('txt').value='4 seconds!'", 4000);
+        var t3 = setTimeout("document.getElementById('txt').value='6 seconds!'", 6000);
+      }
+    </script>
+  </div>
+  

@@ -1,0 +1,15 @@
+<div class="content bt3">
+    <h2>Câu 10. Ví dụ sử dụng kiểu thiết lập thời gian</h2>
+  
+    <form class="card" onsubmit="return false;">
+      <input type="button" value="Display timed alertbox!" onclick="timedMsg()">
+    </form>
+    <p>Click nút ở trên. Hộp thoại sẽ xuất hiện sau 5 giây.</p>
+  
+    <script>
+      function timedMsg(){
+        var t = setTimeout("alert('5 seconds!')", 5000);
+      }
+    </script>
+  </div>
+  

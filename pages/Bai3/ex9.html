@@ -1,0 +1,19 @@
+<div class="content bt3">
+    <h2>Câu 9. Ví dụ sử dụng kiểu ARRAY</h2>
+    <div class="card" id="ex9-out"></div>
+  
+    <script>
+      (function () {
+        const out = document.getElementById('ex9-out');
+        if (!out) return;
+        var mycars = new Array();
+        mycars[0] = "Saab";
+        mycars[1] = "Volvo";
+        mycars[2] = "BMW";
+        for (var x in mycars) {
+          out.insertAdjacentHTML("beforeend", mycars[x] + "<br/>");
+        }
+      })();
+    </script>
+  </div>
+  

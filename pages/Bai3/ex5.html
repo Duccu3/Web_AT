@@ -1,0 +1,41 @@
+<div class="content bt3">
+    <h2>Câu 5. Ví dụ sử dụng câu lệnh switch</h2>
+  
+    <div id="write-here" class="card"></div>
+  
+    <script type="text/javascript" language="javascript">
+      window.documentWriteTarget = document.getElementById('write-here');
+  
+      var d = new Date();
+      var theDay = d.getDay();
+      switch (theDay) {
+        case 1:
+          document.write("Thứ 2");
+          break;
+        case 2:
+          document.write("Thứ 3");
+          break;
+        case 3:
+          document.write("Thứ 4");
+          break;
+        case 4:
+          document.write("Thứ 5");
+          break;
+        case 5:
+          document.write("Thứ 6");
+          break;
+        case 6:
+          document.write("Thứ 7");
+          break;
+        case 0:
+          document.write("Chủ nhật");
+          break;
+        default:
+          document.write("Chúc bạn có một tuần vui vẻ!");
+      }
+  
+      window.documentWriteTarget = null;
+    </script>
+  </div>
+  
+</div>
