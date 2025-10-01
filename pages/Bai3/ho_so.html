@@ -1,0 +1,118 @@
+<div class="content bt3">
+    <h1>3.4 – Form HOSO </h1>
+  
+    <form id="hoso74" class="card" novalidate onsubmit="return false;">
+      <div class="grid">
+        <label>Mã HS (8 ký tự)
+          <input name="mahs" maxlength="8" required>
+        </label>
+  
+        <label>Họ tên (≤ 50)
+          <input name="hoten" maxlength="50" required>
+        </label>
+  
+        <label>Ngày sinh
+          <input type="date" name="ngaysinh" required>
+        </label>
+  
+        <label>Địa chỉ (≤ 150)
+          <input name="diachi" maxlength="150" required>
+        </label>
+  
+        <label>Lớp (6 ký tự)
+          <input name="lop" maxlength="6" required>
+        </label>
+  
+        <label>Điểm Toán (0–10)
+          <input type="number" name="diemtoan" min="0" max="10" step="0.1" required>
+        </label>
+  
+        <label>Điểm Lý (0–10)
+          <input type="number" name="diemly"   min="0" max="10" step="0.1" required>
+        </label>
+  
+        <label>Điểm Hóa (0–10)
+          <input type="number" name="diemhoa"  min="0" max="10" step="0.1" required>
+        </label>
+      </div>
+  
+      <div style="margin-top:10px">
+        <button class="btn" id="save74">Lưu</button>
+        <button class="btn" type="button" id="clear74">Xóa trắng</button>
+        <span id="msg74" style="margin-left:8px;font-weight:700"></span>
+      </div>
+    </form>
+  </div>
+  
+  <script>
+  (() => {
+    const f = document.getElementById('hoso74');
+    const msg = document.getElementById('msg74');
+  
+    const setErr = (el, m) => {
+      const lb = el.closest('label');
+      lb?.classList.toggle('invalid', !!m);
+      let e = lb.querySelector('.err');
+      if (!e) { e = document.createElement('small'); e.className = 'err'; lb.appendChild(e); }
+      e.textContent = m || '';
+    };
+  
+    // Chuẩn hoá họ tên khi rời ô: gộp khoảng trắng, viết hoa chữ đầu từ
+    f.hoten.addEventListener('blur', () => {
+      const v = f.hoten.value.trim().replace(/\s+/g, ' ');
+      f.hoten.value = v.replace(/(^|\s)\p{L}/gu, m => m.toUpperCase());
+    });
+  
+    function validate() {
+      msg.textContent = '';
+      f.querySelectorAll('.err').forEach(e => e.textContent = '');
+      f.querySelectorAll('label').forEach(lb => lb.classList.remove('invalid'));
+      let ok = true;
+  
+      // MAHS: đúng 8 ký tự chữ/số, không khoảng trắng
+      const mahs = f.mahs.value.trim();
+      if (!/^[A-Za-z0-9]{8}$/.test(mahs)) { setErr(f.mahs, 'Phải đủ 8 ký tự chữ/số'); ok = false; }
+  
+      // HOTEN
+      const hoten = f.hoten.value.trim();
+      if (!hoten) setErr(f.hoten, 'Bắt buộc'), ok = false;
+      else if (hoten.length > 50) setErr(f.hoten, '≤ 50 ký tự'), ok = false;
+  
+      // NGAYSINH: hợp lệ, không vượt hôm nay
+      const d = new Date(f.ngaysinh.value);
+      const today = new Date(); today.setHours(0,0,0,0);
+      if (isNaN(d)) setErr(f.ngaysinh, 'Chọn ngày'), ok = false;
+      else if (d > today) setErr(f.ngaysinh, 'Không vượt hôm nay'), ok = false;
+  
+      // DIACHI
+      const dc = f.diachi.value.trim();
+      if (!dc) setErr(f.diachi, 'Bắt buộc'), ok = false;
+      else if (dc.length > 150) setErr(f.diachi, '≤ 150 ký tự'), ok = false;
+  
+      // LOP: đúng 6 ký tự chữ/số
+      const lop = f.lop.value.trim();
+      if (!/^[A-Za-z0-9]{6}$/.test(lop)) { setErr(f.lop, 'Phải đủ 6 ký tự chữ/số'); ok = false; }
+  
+      // Điểm 0..10
+      const mark = el => {
+        const v = Number(el.value);
+        if (el.value === '' || Number.isNaN(v) || v < 0 || v > 10) { setErr(el, '0–10'); ok = false; }
+      };
+      mark(f.diemtoan); mark(f.diemly); mark(f.diemhoa);
+  
+      return ok;
+    }
+  
+    document.getElementById('save74').onclick = () => {
+      if (!validate()) return;
+      msg.textContent = 'Dữ liệu hợp lệ (demo).';
+    };
+  
+    document.getElementById('clear74').onclick = () => {
+      f.reset(); msg.textContent = '';
+      f.querySelectorAll('.err').forEach(e => e.textContent = '');
+      f.querySelectorAll('label').forEach(lb => lb.classList.remove('invalid'));
+    };
+  })();
+  </script>
+  

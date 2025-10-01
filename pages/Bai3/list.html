@@ -1,0 +1,69 @@
+<div class="content bt3">
+    <h2>3.6 – Danh sách</h2>
+  
+    <table id="ds" class="card tbl-check">
+      <thead>
+        <tr>
+          <th style="width:44px"><input type="checkbox" id="chkAll"></th>
+          <th>Họ tên</th><th>Ngày sinh</th><th>Giới tính</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox" class="rowChk"></td>
+          <td>Hoàng Thị Thảo</td><td>23/6/1990</td><td>Nữ</td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" class="rowChk"></td>
+          <td>Ngô Mạnh Quân</td><td>14/4/1992</td><td>Nam</td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" class="rowChk"></td>
+          <td>Nguyễn Thanh Tùng</td><td>27/9/1991</td><td>Nam</td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" class="rowChk"></td>
+          <td>Hoàng Thị Ngân</td><td>12/12/1992</td><td>Nữ</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <script>
+  (function(){
+    const tbl = document.getElementById('ds');
+    const chkAll = document.getElementById('chkAll');
+  
+    // chọn/bỏ tất cả
+    chkAll.addEventListener('change', () => {
+      tbl.querySelectorAll('tbody .rowChk').forEach(c => {
+        c.checked = chkAll.checked;
+        setRowColor(c.closest('tr'), c.checked);
+      });
+    });
+  
+    // ủy quyền sự kiện trong tbody
+    tbl.querySelector('tbody').addEventListener('click', (e) => {
+      const tr = e.target.closest('tr');
+      if (!tr) return;
+  
+      // click dòng = toggle checkbox
+      if (e.target.tagName !== 'INPUT') {
+        const c = tr.querySelector('.rowChk');
+        c.checked = !c.checked;
+      }
+      const c = tr.querySelector('.rowChk');
+      setRowColor(tr, c.checked);
+      syncMaster();
+    });
+  
+    function setRowColor(tr, on){
+      tr.classList.toggle('checked', !!on);
+    }
+    function syncMaster(){
+      const items = [...tbl.querySelectorAll('tbody .rowChk')];
+      chkAll.checked = items.length>0 && items.every(c=>c.checked);
+    }
+  })();
+  </script>
+  

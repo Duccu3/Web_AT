@@ -1,0 +1,58 @@
+<div class="content bt3">
+    <h1>3.7 – Thực đơn</h1>
+  
+    <div class="menu-wrap card" data-output="fixed">  <!-- fixed | inline -->
+        <ul id="menu" class="vmenu">
+          <li data-title="Quản lý cán bộ">» Quản lý cán bộ (Đăng ký thông tin)</li>
+          <li data-title="Phân quyền">» Phân quyền</li>
+          <li data-title="Cổng thông tin đào tạo và người học">» Cổng thông tin đào tạo và người học</li>
+          <li data-title="Quản lý văn bản và hồ sơ công việc">» Quản lý văn bản và hồ sơ công việc</li>
+          <li data-title="Hành chính công">» Hành chính công</li>
+          <li data-title="Hệ thống thông tin báo cáo">» Hệ thống thông tin báo cáo</li>
+        </ul>
+      
+        <div class="menu-right"><a id="menuTitle" href="javascript:void(0)"></a></div>
+        <div id="menu-output" class="menu-output"></div>
+      </div>
+  </div>
+  
+  <script>
+    (() => {
+      const wrap  = document.querySelector('.menu-wrap');
+      const mode  = wrap.dataset.output || 'fixed';   // 'fixed' | 'inline'
+      const ul    = document.getElementById('menu');
+      const title = document.getElementById('menuTitle');
+      const out   = document.getElementById('menu-output');
+    
+      // hover làm sáng và tooltip
+      ul.addEventListener('mouseover', e=>{
+        const li = e.target.closest('li'); if(!li) return;
+        li.classList.add('hover');
+        li.title = li.dataset.title;
+      });
+      ul.addEventListener('mouseout', e=>{
+        const li = e.target.closest('li'); if(!li) return;
+        li.classList.remove('hover');
+      });
+    
+      function select(li){
+        ul.querySelectorAll('li.active').forEach(n=>n.classList.remove('active'));
+        li.classList.add('active');
+    
+        if(mode === 'fixed'){
+          title.textContent = '» ' + li.dataset.title;
+        }else{ // inline
+          out.textContent = '» ' + li.dataset.title;
+          out.style.top = li.offsetTop + 'px';
+        }
+      }
+    
+      ul.querySelectorAll('li').forEach(li=>{
+        li.addEventListener('click', () => select(li));
+      });
+    
+      // mặc định chọn dòng đầu
+      select(ul.querySelector('li'));
+    })();
+    </script>
+    

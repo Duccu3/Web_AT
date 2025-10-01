@@ -1,0 +1,141 @@
+<div class="content bt3">
+  <h2>3.10 – Máy tính</h2>
+
+  <div class="calc card" id="calc">
+    <input id="scr" class="scr" value="0" readonly>
+
+    <button data-act="C">C</button>
+    <button data-act="CE">CE</button>
+
+    <button data-num="7">7</button>
+    <button data-num="8">8</button>
+    <button data-num="9">9</button>
+    <button data-op="+/-">+/-</button>
+    <button data-op="%">%</button>
+
+    <button data-num="4">4</button>
+    <button data-num="5">5</button>
+    <button data-num="6">6</button>
+    <button data-op="+">+</button>
+    <button data-op="-">-</button>
+
+    <button data-num="1">1</button>
+    <button data-num="2">2</button>
+    <button data-num="3">3</button>
+    <button data-op="*">*</button>
+    <button data-op="/">/</button>
+
+    <button class="span2" data-num="0">0</button>
+    <button data-dot=".">.</button>
+    <button class="span2" data-eq="=">=</button>
+  </div>
+</div>
+
+<style>
+/* layout máy tính */
+.calc{display:grid;grid-template-columns:repeat(5,70px);gap:8px;max-width:370px}
+.calc .scr{grid-column:1/ span 3;height:40px;padding:6px 10px;text-align:right;font-size:20px}
+.calc button{height:40px;font-size:16px;cursor:pointer}
+.calc .span2{grid-column:span 2}
+</style>
+
+<script>
+(function(){
+  const el = document.getElementById('calc');
+  const scr = document.getElementById('scr');
+
+  let a = null;          // toán hạng 1
+  let op = null;         // phép toán đang chờ
+  let typing = false;    // đang nhập số cho màn hình
+  let last = null;       // lưu toán hạng 2 cuối cho "=" lặp lại
+
+  function show(v){
+    const s = String(v);
+    scr.value = (s.length>16) ? Number(v).toExponential(8) : s;
+  }
+
+  function getScr(){
+    return Number(scr.value);
+  }
+
+  function putDigit(d){
+    if (!typing || scr.value === '0') {
+      scr.value = d;
+      typing = true;
+    } else {
+      if (scr.value.length < 16) scr.value += d;
+    }
+  }
+
+  function dot(){
+    if (!typing){ scr.value='0.'; typing=true; return; }
+    if (!scr.value.includes('.')) scr.value += '.';
+  }
+
+  function doEq(b){
+    if (op==null) return a ?? getScr();
+    const x = (a==null)? getScr(): a;
+    const y = (b==null)? getScr(): b;
+    let r = x;
+    switch(op){
+      case '+': r = x + y; break;
+      case '-': r = x - y; break;
+      case '*': r = x * y; break;
+      case '/': r = y===0 ? NaN : x / y; break;
+    }
+    a = r; show(r);
+    return r;
+  }
+
+  function percent(){
+    const cur = getScr();
+    if (a!=null && op) show(a*cur/100);
+    else show(cur/100);
+  }
+
+  function toggleSign(){ show(-getScr()); }
+
+  function setOp(nextOp){
+    const cur = getScr();
+    if (op && typing){ a = doEq(cur); }
+    else if (a==null){ a = cur; }
+    op = nextOp;
+    typing = false;
+    last = null;
+  }
+
+  el.addEventListener('click',e=>{
+    const t = e.target;
+    if (t.dataset.num){ putDigit(t.dataset.num); return; }
+    if (t.dataset.dot){ dot(); return; }
+    if (t.dataset.op){
+      const k = t.dataset.op;
+      if (k === '+/-') { toggleSign(); return; }
+      if (k === '%')   { percent(); return; }
+      setOp(k); return;
+    }
+    if (t.dataset.eq){
+      const cur = getScr();
+      if (typing || last==null) last = cur;
+      const r = doEq(last);
+      show(r);
+      typing = false;
+      return;
+    }
+    if (t.dataset.act === 'C'){ a=null; op=null; typing=false; last=null; show(0); return; }
+    if (t.dataset.act === 'CE'){ show(0); typing=false; return; }
+  });
+
+  // hỗ trợ phím số và toán tử
+  window.addEventListener('keydown',e=>{
+    if (/\d/.test(e.key)) { putDigit(e.key); }
+    else if (['+','-','*','/'].includes(e.key)) { setOp(e.key); }
+    else if (e.key === 'Enter' || e.key === '='){ e.preventDefault(); el.querySelector('[data-eq]').click(); }
+    else if (e.key === '.'){ dot(); }
+    else if (e.key.toLowerCase()==='c'){ a=null; op=null; typing=false; last=null; show(0); }
+    else if (e.key === 'Backspace' && typing){
+      scr.value = scr.value.length>1 ? scr.value.slice(0,-1) : '0';
+    }
+  });
+})();
+</script>

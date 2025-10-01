@@ -1,0 +1,56 @@
+<div class="content bt3">
+    <h1>3.8 – Tabs</h1>
+  
+    <div class="tabs">
+      <button class="tab active" data-target="tab1">Tab 1</button>
+      <button class="tab" data-target="tab2">Tab 2</button>
+      <button class="tab" data-target="tab3">Tab 3</button>
+      <button class="tab" data-target="tab4">Tab 4</button>
+    </div>
+  
+    <!-- Nếu sau này muốn tải trang, dùng iframe dưới và đặt data-src cho tab -->
+    <iframe id="tabFrame" class="tab-frame" hidden></iframe>
+  
+    <div id="tab1" class="tab-pane" style="display:block;">Nội dung của Tab 1</div>
+    <div id="tab2" class="tab-pane">Nội dung của Tab 2</div>
+    <div id="tab3" class="tab-pane">Nội dung của Tab 3</div>
+    <div id="tab4" class="tab-pane">Nội dung của Tab 4</div>
+  </div>
+  
+  <script>
+  (function(){
+    const tabs = document.querySelectorAll('.tabs .tab');
+    const panes = document.querySelectorAll('.tab-pane');
+    const frame = document.getElementById('tabFrame');
+  
+    function show(target){
+      // ẩn mọi pane
+      panes.forEach(p=>p.style.display='none');
+      // hiển thị pane nếu có
+      const pane = document.getElementById(target);
+      if (pane) {
+        frame.hidden = true;
+        pane.style.display = 'block';
+      }
+    }
+  
+    tabs.forEach(tab=>{
+      tab.addEventListener('click', ()=>{
+        tabs.forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+  
+        const src = tab.dataset.src;          // tùy chọn: tải trang
+        const target = tab.dataset.target;    // hiển thị div
+  
+        if (src) {
+          panes.forEach(p=>p.style.display='none');
+          frame.hidden = false;
+          frame.src = src;                    // ví dụ: "pages/Bai2/example.html"
+        } else {
+          show(target);
+        }
+      });
+    });
+  })();
+  </script>
+  

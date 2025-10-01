@@ -26,6 +26,17 @@ const DATA = [
     items: [
       { title: "HTML, CSS và JS", slug: "lab3", pages: [
         { title: "3.1 Ví dụ mẫu", path: "pages/Bai3/examples.html", css: "assets/css/Lab3.css" },
+        { title: "3.2 Quiz", path: "pages/Bai3/Quiz.html", css: "assets/css/Lab3.css" },
+        { title: "3.3 Form", path: "pages/Bai3/form.html", css: "assets/css/Lab3.css" },
+        { title: "3.4 Ho so", path: "pages/Bai3/ho_so.html", css: "assets/css/Lab3.css" },
+        { title: "3.5 Form nhập", path: "pages/Bai3/register.html", css: "assets/css/Lab3.css" },
+        { title: "3.6 Bảng checkbox", path: "pages/Bai3/list.html", css: "assets/css/Lab3.css" },
+        { title: "3.7 Thực đơn", path: "pages/Bai3/menu.html", css: "assets/css/Lab3.css" },
+        { title: "3.8 Tabs", path: "pages/Bai3/tabs.html", css: "assets/css/Lab3.css" },
+        { title: "3.9 Cây thư mục", path: "pages/Bai3/tree.html", css: "assets/css/Lab3.css" },
+        { title: "3.10 Máy tính cơ bản", path: "pages/Bai3/maytinh.html", css: "assets/css/Lab3.css" },
+        { title: "3.11 Hoạt cảnh", path: "pages/Bai3/animation.html", css: "assets/css/Lab3.css" },
+        { title: "3.12 Sắp xếp và tìm kiếm trên bảng", path: "pages/Bai3/search.html", css: "assets/css/Lab3.css" },
       ]}
     ]
   },

@@ -5,3 +5,122 @@
 .bt3 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
 .bt3 .btn{display:inline-block;padding:6px 10px;border-radius:6px;background:#fff;cursor:pointer}
 .bt3 pre{background:#f8fafc;border-radius:6px;padding:8px;overflow:auto}
+
+.bt3 label{display:block}
+.bt3 label .err{display:block;font-size:12px;color:#dc2626;margin-top:2px}
+.bt3 label.invalid input,
+.bt3 label.invalid select,
+.bt3 label.invalid textarea{border-color:#dc2626}
+.bt3 .wfull{width:100%}
+
+/* ----- Form 7.5 ----- */
+.bt3 .form-grid{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:14px 24px}
+.bt3 .form-grid label{display:flex;flex-direction:column;gap:6px;font-weight:600}
+.bt3 .form-grid input{padding:8px 10px}
+.bt3 .form-grid .span2{grid-column:span 2}.bt3 .form-grid .full{grid-column:1 / -1}
+.bt3 .actions{display:flex;gap:10px;align-items:center}
+
+/* buộc nhập: nền xanh nhạt */
+.bt3 label.req input{background:#e6f7e6}
+
+/* placeholder DOB xám cho đúng yêu cầu */
+.bt3 #dob.placeholder{color:#888}
+
+/* báo lỗi */
+.bt3 label .err{min-height:18px;color:#dc2626;font-size:12px}
+.bt3 label.invalid input{border-color:#dc2626}
+
+@media (max-width:900px){.bt3 .form-grid{grid-template-columns:repeat(2,minmax(220px,1fr))}}
+@media (max-width:600px){.bt3 .form-grid{grid-template-columns:1fr}.bt3 .form-grid .span2,.bt3 .form-grid .full{grid-column:auto}}
+.bt3 input.req{ background:#bff; }               /* cyan nhạt */
+.bt3 .err{ color:#dc2626; font-size:12px; margin-left:6px }
+.bt3 td.invalid input{ border-color:#dc2626 }
+.bt3 table td{ padding:6px 10px; vertical-align:top }
+
+/* 7.6 bảng checkbox */
+.bt3 .tbl-check{border-collapse:collapse;width:100%}
+.bt3 .tbl-check th,.bt3 .tbl-check td{border:1px solid #ddd;padding:8px}
+.bt3 .tbl-check thead th{background:#aef}        /* tiêu đề xanh dương nhạt */
+.bt3 .tbl-check tbody tr:nth-child(odd){background:#f3f3f3} /* lẻ */
+.bt3 .tbl-check tbody tr:nth-child(even){background:#e9e9e9}/* chẵn */
+.bt3 .tbl-check tbody tr:hover{background:#44d17a;cursor:pointer} /* hover xanh lá */
+.bt3 .tbl-check tbody tr.checked{background:#ffd74d}             /* chọn = vàng */
+
+/* 7.7 thực đơn dọc */
+.bt3 .menu-wrap{display:flex;gap:12px;align-items:flex-start}
+.bt3 .vmenu{list-style:none;margin:0;padding:0;width:260px;border:1px solid #dcdcdc}
+.bt3 .vmenu li{padding:8px 10px;background:#eee;border-bottom:1px solid #dcdcdc;transition:background .15s}
+.bt3 .vmenu li.hover{background:#cfefff}   /* đưa chuột sáng lên */
+.bt3 .vmenu li.active{background:#19c3ff;color:#fff} /* click đổi màu xanh */
+.bt3 .menu-right{padding:8px 0;min-height:32px;flex:1}
+.bt3 .menu-right a{color:#1e3a8a;text-decoration:none;font-weight:700}
+.menu-output{
+    position:absolute; left:280px; top:0;
+    padding:10px 12px; min-width:360px;
+    color:#0b63bd; font-weight:700;
+}
+.bt3 .menu-wrap{position:relative}
+
+/* Ô hiển thị cạnh dòng được bấm */
+.menu-output{
+  position:absolute; left:280px; top:0;
+  padding:10px 12px; min-width:360px;
+  color:#0b63bd; font-weight:700;
+}
+
+/* Ẩn/hiện đúng theo chế độ */
+.menu-wrap[data-output="fixed"]  .menu-output{display:none}
+.menu-wrap[data-output="inline"] .menu-right {display:none}
+/* Tabs 7.8 */
+.bt3 .tabs{display:flex;border-bottom:2px solid #ccc;margin-bottom:10px;gap:4px}
+.bt3 .tab{padding:8px 16px;cursor:pointer;background:#f2f2f2;border:1px solid #ccc;border-bottom:none}
+.bt3 .tab:hover:not(.active){background:#e6e6e6}
+.bt3 .tab.active{background:#00bcd4;color:#fff;font-weight:700}
+.bt3 .tab-pane{padding:16px;border:1px solid #ccc}
+.bt3 .tab-frame{width:100%;height:520px;border:1px solid #ccc}
+
+/* ===== 7.9 Cây thư mục ===== */
+.bt3 .tree{ list-style:none; padding:8px 12px; margin:0; }
+.bt3 .tree ul{ list-style:none; margin:0 0 0 22px; padding:0; }
+.bt3 .tree li{ margin:2px 0; }
+
+.bt3 .tree .exp,
+.bt3 .tree .leaf{
+  display:inline-block; width:16px; height:16px; line-height:16px;
+  text-align:center; cursor:pointer; margin-right:4px; user-select:none;
+}
+
+/* nút +/- cho node có con */
+.bt3 .tree li:not(.open) > .exp::before{ content:"+"; color:#333; }
+.bt3 .tree li.open       > .exp::before{ content:"−"; color:#333; }
+
+/* khoảng đệm cho lá để canh thẳng cột */
+.bt3 .tree .leaf::before{ content:""; }
+
+/* nhãn node + icon thư mục */
+.bt3 .tree .label{
+  cursor:pointer; color:#4c1d95;  /* tím */
+}
+.bt3 .tree .label::before{ content:"📁"; margin-right:6px; }
+.bt3 .tree .label:hover{ text-decoration:underline; }
+
+/* đang chọn */
+.bt3 .tree .label.selected{ color:#0ea5e9; font-weight:700; }
+
+/* ẩn/hiện con */
+.bt3 .tree li:not(.open) > ul{ display:none; }
+
+
+/* 7.12 */
+.table.sort-search{border-collapse:collapse;width:100%}
+.table.sort-search th,.table.sort-search td{border:1px solid #ccc;padding:8px 10px;text-align:left}
+.table.sort-search thead th{background:#f7f7f7}
+.table.sort-search tbody tr:nth-child(odd){background:#fafafa}
+.table.sort-search tbody tr:nth-child(even){background:#f0f6ff}
+
+.table.sort-search th.sortable{cursor:pointer;position:relative;user-select:none}
+.table.sort-search th.sortable::after{content:"";position:absolute;right:8px}
+.table.sort-search th.sortable.sorted-asc::after{content:"▲"}
+.table.sort-search th.sortable.sorted-desc::after{content:"▼"}
+
+.highlight{background:yellow;font-weight:600}

@@ -1,0 +1,132 @@
+<div class="content bt3">
+    <h1>3.3 – Form thông tin lớp</h1>
+  
+    <form id="lopForm" class="card" novalidate onsubmit="return false;">
+      <div class="grid">
+        <label>Mã lớp
+          <input type="text" name="malop" placeholder="AT19C" required>
+          <small class="err"></small>
+        </label>
+  
+        <label>Tên lớp
+          <input type="text" name="tenlop" placeholder="An toàn thông tin K19" required>
+          <small class="err"></small>
+        </label>
+  
+        <label>Số lượng SV
+          <input type="number" name="soluong" min="1" max="200" required>
+          <small class="err"></small>
+        </label>
+  
+        <label>Học kỳ
+          <select name="hocky" required>
+            <option value="">-- chọn --</option>
+            <option>HK1</option><option>HK2</option><option>HK3</option>
+          </select>
+          <small class="err"></small>
+        </label>
+  
+        <label>GV phụ trách
+          <input type="text" name="gv" required>
+          <small class="err"></small>
+        </label>
+  
+        <label>Email liên hệ
+          <input type="email" name="email" placeholder="gv@example.com" required>
+          <small class="err"></small>
+        </label>
+      </div>
+  
+      <label>Ghi chú
+        <textarea name="note" rows="3" class="wfull"></textarea>
+      </label>
+  
+      <div style="margin-top:10px">
+        <button class="btn" id="submitBtn">Lưu</button>
+        <button class="btn" type="button" id="resetBtn">Xóa trắng</button>
+        <span id="msg" style="margin-left:8px;font-weight:700"></span>
+      </div>
+    </form>
+  </div>
+  
+  <script>
+  (function () {
+    const f = document.getElementById('lopForm');
+    const msg = document.getElementById('msg');
+  
+    function setErr(input, text){
+      const wrap = input.closest('label');
+      wrap.querySelector('.err').textContent = text || '';
+      wrap.classList.toggle('invalid', !!text);
+    }
+  
+    function validate(){
+      msg.textContent = '';
+      let firstBad = null;
+  
+      // reset
+      f.querySelectorAll('label').forEach(lb=>lb.classList.remove('invalid'));
+      f.querySelectorAll('.err').forEach(e=>e.textContent='');
+  
+      // Mã lớp: 2–10 ký tự, không dấu cách
+      const malop = f.malop.value.trim();
+      if (malop.length < 2 || malop.length > 10 || /\s/.test(malop)){
+        setErr(f.malop, 'Mã lớp 2–10 ký tự, không khoảng trắng');
+        firstBad = firstBad || f.malop;
+      }
+  
+      // Tên lớp: bắt buộc
+      if (!f.tenlop.value.trim()){
+        setErr(f.tenlop, 'Nhập tên lớp');
+        firstBad = firstBad || f.tenlop;
+      }
+  
+      // Số lượng: 1–200
+      const sl = Number(f.soluong.value);
+      if (!sl || sl < 1 || sl > 200){
+        setErr(f.soluong, '1–200');
+        firstBad = firstBad || f.soluong;
+      }
+  
+      // Học kỳ: required
+      if (!f.hocky.value){
+        setErr(f.hocky, 'Chọn học kỳ');
+        firstBad = firstBad || f.hocky;
+      }
+  
+      // GV: required
+      if (!f.gv.value.trim()){
+        setErr(f.gv, 'Nhập tên GV');
+        firstBad = firstBad || f.gv;
+      }
+  
+      // Email: pattern cơ bản
+      const email = f.email.value.trim();
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!re.test(email)){
+        setErr(f.email, 'Email không hợp lệ');
+        firstBad = firstBad || f.email;
+      }
+  
+      if (firstBad){
+        firstBad.focus();
+        return false;
+      }
+      return true;
+    }
+  
+    document.getElementById('submitBtn').onclick = () => {
+      if (!validate()) return;
+      msg.textContent = 'Đã lưu (demo – không gửi server).';
+    };
+  
+    document.getElementById('resetBtn').onclick = () => {
+      f.reset();
+      msg.textContent = '';
+      f.querySelectorAll('label').forEach(lb=>lb.classList.remove('invalid'));
+      f.querySelectorAll('.err').forEach(e=>e.textContent='');
+      f.malop.focus();
+    };
+  })();
+  </script>
+  

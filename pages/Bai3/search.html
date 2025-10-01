@@ -1,0 +1,89 @@
+<div class="content bt3">
+    <h2>7.12 – Sắp xếp & tìm kiếm</h2>
+  
+    <input id="searchInput" class="input" placeholder="Nhập các từ cần tìm" />
+  
+    <table id="productTable" class="table sort-search">
+      <thead>
+        <tr>
+          <th style="width:64px">TT</th>
+          <th class="sortable" data-col="1">Mã sản phẩm</th>
+          <th class="sortable" data-col="2">Tên sản phẩm</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>SP001</td><td>Máy giặt</td></tr>
+        <tr><td>2</td><td>SP002</td><td>Bếp đa năng</td></tr>
+        <tr><td>3</td><td>SP003</td><td>Lò sưởi</td></tr>
+        <tr><td>4</td><td>SP004</td><td>Điều hoà nhiệt độ</td></tr>
+        <tr><td>5</td><td>SP005</td><td>Tủ lạnh</td></tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <script>
+  (() => {
+    const table   = document.getElementById('productTable');
+    const tbody   = table.tBodies[0];
+    const headers = table.querySelectorAll('th.sortable');
+  
+    // lưu nguyên văn để highlight/khôi phục
+    Array.from(tbody.rows).forEach(r=>{
+      for(let i=1;i<r.cells.length;i++){ r.cells[i].dataset.raw = r.cells[i].textContent; }
+    });
+  
+    let sortDir = {}; // {col: true=asc, false=desc}
+  
+    headers.forEach(h=>{
+      h.addEventListener('click', ()=>{
+        const col = +h.dataset.col;
+  
+        headers.forEach(x=>x.classList.remove('sorted-asc','sorted-desc'));
+        sortDir[col] = !sortDir[col];
+  
+        const rows = Array.from(tbody.rows);
+        rows.sort((a,b)=>{
+          const A = a.cells[col].textContent.trim().toLowerCase();
+          const B = b.cells[col].textContent.trim().toLowerCase();
+          return sortDir[col] ? A.localeCompare(B) : B.localeCompare(A);
+        });
+  
+        rows.forEach((row,i)=>{
+          row.cells[0].textContent = i+1;
+          tbody.appendChild(row);
+        });
+  
+        h.classList.add(sortDir[col] ? 'sorted-asc' : 'sorted-desc');
+      });
+    });
+  
+    // tìm kiếm + highlight
+    const q = document.getElementById('searchInput');
+    q.addEventListener('input', function(){
+      const kw = this.value.trim().toLowerCase();
+      const rx = kw ? new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi') : null;
+  
+      Array.from(tbody.rows).forEach(row=>{
+        let hit = false;
+        for(let i=1;i<row.cells.length;i++){
+          const cell = row.cells[i];
+          const raw  = cell.dataset.raw || cell.textContent;
+          if(kw && raw.toLowerCase().includes(kw)){
+            hit = true;
+            cell.innerHTML = raw.replace(rx,'<span class="highlight">$1</span>');
+          }else{
+            cell.innerHTML = raw;
+          }
+        }
+        row.style.display = (hit || !kw) ? '' : 'none';
+      });
+  
+      // cập nhật lại TT cho các hàng đang hiển thị
+      let tt = 1;
+      Array.from(tbody.rows).forEach(r=>{
+        if(r.style.display !== 'none') r.cells[0].textContent = tt++;
+      });
+    });
+  })();
+  </script>
+  

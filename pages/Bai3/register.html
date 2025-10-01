@@ -1,0 +1,192 @@
+<div class="content bt3">
+    <h1>3.5 – Đăng ký thành viên</h1>
+  
+    <form id="regForm" class="card" novalidate onsubmit="return false;">
+      <table>
+        <tr>
+          <td>Họ tên:</td>
+          <td>
+            <input id="fullname" class="req" autocomplete="name">
+            <span class="err"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Địa chỉ:</td>
+          <td><input id="address" autocomplete="street-address"></td>
+        </tr>
+        <tr>
+          <td>Giới tính:</td>
+          <td>
+            <label><input type="radio" name="sex" value="Nam"> Nam</label>
+            <label style="margin-left:12px"><input type="radio" name="sex" value="Nữ"> Nữ</label>
+          </td>
+        </tr>
+        <tr>
+          <td>Ngày sinh:</td>
+          <td>
+            <input id="dob" class="req" placeholder="nn/tt/nnnn" inputmode="numeric">
+            <span class="err"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>E-mail:</td>
+          <td>
+            <input id="email" class="req" autocomplete="email">
+            <span class="err"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Điện thoại:</td>
+          <td><input id="phone" autocomplete="tel"></td>
+        </tr>
+        <tr>
+          <td>Khóa đăng ký:</td>
+          <td>
+            <label><input type="checkbox" value="TA"> Tiếng Anh</label>
+            <label style="margin-left:12px"><input type="checkbox" value="QT"> Quản trị</label>
+            <label style="margin-left:12px"><input type="checkbox" value="CNTT"> CNTT</label>
+          </td>
+        </tr>
+        <tr>
+          <td>Tên sử dụng:</td>
+          <td>
+            <input id="username" class="req" autocomplete="username">
+            <span class="err"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Mật khẩu:</td>
+          <td>
+            <input id="password" class="req" type="password" autocomplete="new-password">
+            <span class="err"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Gõ lại mật khẩu:</td>
+          <td>
+            <input id="repassword" class="req" type="password" autocomplete="new-password">
+            <span class="err"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>Ghi chú:</td>
+          <td><textarea id="note" rows="3" cols="36"></textarea></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <button class="btn" id="accept">Chấp nhận</button>
+            <button class="btn" id="skip" type="button">Bỏ qua</button>
+            <span id="formMsg" style="margin-left:8px;font-weight:700"></span>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  
+  <script>
+  (function(){
+    const $ = id => document.getElementById(id);
+    const f  = $('regForm');
+    const els = {
+      fullname: $('fullname'),
+      address:  $('address'),
+      email:    $('email'),
+      dob:      $('dob'),
+      phone:    $('phone'),
+      username: $('username'),
+      password: $('password'),
+      repass:   $('repassword'),
+      msg:      $('formMsg')
+    };
+  
+    // ===== 1) đặt focus ô Họ tên khi vào trang
+    els.fullname.focus();
+  
+    // ===== 2) tô nền xanh cho ô bắt buộc
+    // (thêm CSS ở dưới)
+    // class="req" đã được gán sẵn.
+  
+    // ===== 3) Enter chuyển sang ô tiếp theo
+    f.addEventListener('keydown', e=>{
+      if(e.key!=='Enter') return;
+      e.preventDefault();
+      const inputs=[...f.querySelectorAll('input,textarea')].filter(i=>i.type!=='radio'&&i.type!=='checkbox');
+      const i=inputs.indexOf(e.target);
+      if(i>-1 && inputs[i+1]) inputs[i+1].focus();
+    });
+  
+    // ===== 4) Chuẩn hóa họ tên khi blur
+    els.fullname.addEventListener('blur', ()=>{
+      els.fullname.value = normalizeName(els.fullname.value);
+    });
+    function normalizeName(s){
+      return s.trim().replace(/\s+/g,' ')
+        .split(' ')
+        .map(w=>w.charAt(0).toLocaleUpperCase('vi')+w.slice(1).toLocaleLowerCase('vi'))
+        .join(' ');
+    }
+  
+    // ===== 5) Kiểm tra email khi blur theo mẫu ten[.ten]*@ten[.ten]*
+    els.email.addEventListener('blur', validateEmail);
+    function validateEmail(){
+      const ok = /^[A-Za-z0-9._%+-]+(?:\.[A-Za-z0-9._%+-]+)*@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*$/
+                  .test(els.email.value.trim());
+      setErr(els.email, ok?'':'Email không đúng định dạng');
+      return ok;
+    }
+  
+    // ===== 6) Ngày sinh: tự động chèn dấu '/'
+    els.dob.addEventListener('input', ()=>{
+      let v = els.dob.value.replace(/\D/g,'').slice(0,8);
+      if(v.length>4) v = v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4);
+      else if(v.length>2) v = v.slice(0,2)+'/'+v.slice(2);
+      els.dob.value = v;
+    });
+  
+    // ===== 7) Gõ lại mật khẩu: kiểm tra trùng
+    function checkRepass(){
+      const ok = els.repass.value===els.password.value && els.password.value.length>0;
+      setErr(els.repass, ok?'':'Mật khẩu gõ lại không đúng');
+      return ok;
+    }
+    els.password.addEventListener('input', checkRepass);
+    els.repass.addEventListener('blur',  checkRepass);
+  
+    // ===== 8) Bấm Chấp nhận: kiểm tra đã nhập (trừ địa chỉ, điện thoại)
+    $('accept').addEventListener('click', e=>{
+      e.preventDefault();
+      els.msg.textContent='';
+      let ok = true;
+  
+      ok &= required(els.fullname,'Hãy nhập họ tên');
+      ok &= required(els.dob,'Hãy nhập ngày sinh (nn/tt/nnnn)');
+      ok &= required(els.email,'Hãy nhập email') && validateEmail();
+      ok &= required(els.username,'Hãy nhập tên sử dụng');
+      ok &= required(els.password,'Hãy nhập mật khẩu');
+      ok &= required(els.repass,'Hãy nhập lại mật khẩu') && checkRepass();
+  
+      if(ok){ els.msg.textContent='✓ Hợp lệ'; f.reset(); els.fullname.focus(); }
+    });
+  
+    $('skip').addEventListener('click', ()=>{
+      f.reset(); els.msg.textContent='';
+      f.querySelectorAll('.err').forEach(e=>e.textContent='');
+      f.querySelectorAll('td').forEach(td=>td.classList.remove('invalid'));
+      els.fullname.focus();
+    });
+  
+    // helpers
+    function setErr(input,msg){
+      const td = input.parentElement;
+      const span = td.querySelector('.err');
+      span.textContent = msg||'';
+      td.classList.toggle('invalid', !!msg);
+    }
+    function required(input,msg){
+      const ok = input.value.trim()!=='';
+      setErr(input, ok?'':msg); return ok;
+    }
+  })();
+  </script>
+  

@@ -1,0 +1,122 @@
+<div class="content bt3">
+    <h1>3.2 – Thi trắc nghiệm</h1>
+  
+    <!-- Chọn đề (TEST X) -->
+    <label>Chọn đề:
+      <select id="testPicker">
+        <option value="test1">TEST 1</option>
+        <option value="test2">TEST 2</option>
+      </select>
+    </label>
+  
+    <!-- Vùng render đề -->
+    <form id="quiz" class="card" onsubmit="return false;"></form>
+  
+    <div style="margin-top:10px">
+      <button class="btn" id="submit">Nộp bài</button>
+      <button class="btn" id="reset" type="button">Làm lại</button>
+      <span id="result" style="margin-left:8px;font-weight:700"></span>
+    </div>
+  </div>
+  
+  <script>
+  (function () {
+    // 1) Ngân hàng đề theo TEST X
+    const TESTS = {
+      test1: [
+        {type:'single', ans:'B', q:'HTML là viết tắt của?', opts:['HighText Machine Language','HyperText Markup Language','Hyperlinks and Text Markup Language']},
+        {type:'multi',  ans:'A,C', q:'Thẻ khối (block-level) là?', opts:['<div>','<span>','<p>']},
+        {type:'tf',     ans:'true',q:'CSS có thể đặt trong thuộc tính style.'},
+        {type:'text',   ans:'javascript', q:'Ngôn ngữ thao tác DOM phổ biến: ________'}
+      ],
+      test2: [
+        {type:'single', ans:'C', q:'Thẻ nào tự đóng?', opts:['<div>','<p>','<br>']},
+        {type:'multi',  ans:'B,C', q:'Thuộc tính CSS hợp lệ?', opts:['font-bold','display:flex','margin: 0']},
+        {type:'tf',     ans:'false', q:'`getElementById` trả về mảng.'},
+        {type:'text',   ans:'hypertext markup language', q:'Viết đầy đủ của HTML: ________'}
+      ]
+    };
+  
+    // 2) Render 1 câu hỏi
+    function renderQuestion(q, idx) {
+      const name = 'q' + (idx+1);
+      if (q.type === 'single' || q.type === 'tf') {
+        const opts = q.type==='tf' ? [['true','Đúng'],['false','Sai']]
+                                   : q.opts.map((t,i)=>[String.fromCharCode(65+i), t]);
+        return `
+          <fieldset class="q" data-type="${q.type}" data-answer="${q.ans}">
+            <legend>${idx+1}. ${q.q}</legend>
+            ${opts.map(o=>`<label><input type="radio" name="${name}" value="${o[0]}"> ${o[1]}</label>`).join('<br>')}
+          </fieldset>`;
+      }
+      if (q.type === 'multi') {
+        const opts = q.opts.map((t,i)=>[String.fromCharCode(65+i), t]);
+        return `
+          <fieldset class="q" data-type="multi" data-answer="${q.ans}">
+            <legend>${idx+1}. ${q.q}</legend>
+            ${opts.map(o=>`<label><input type="checkbox" name="${name}" value="${o[0]}"> ${o[1]}</label>`).join('<br>')}
+          </fieldset>`;
+      }
+      // text
+      return `
+        <fieldset class="q" data-type="text" data-answer="${q.ans}">
+          <legend>${idx+1}. ${q.q}</legend>
+          <input type="text" name="${name}" placeholder="nhập đáp án">
+        </fieldset>`;
+    }
+  
+    // 3) Render đề theo TEST
+    const picker = document.getElementById('testPicker');
+    const form   = document.getElementById('quiz');
+    function loadTest(id){
+      const data = TESTS[id] || [];
+      form.innerHTML = data.map(renderQuestion).join('');
+      document.getElementById('result').textContent = '';
+    }
+  
+    // 4) Chấm điểm
+    function norm(s){ return (s||'').trim().toLowerCase().replace(/\s+/g,' '); }
+    function grade(){
+      let ok=0, total=0;
+      form.querySelectorAll('.q').forEach(q=>{
+        total++;
+        q.style.borderColor = '#e5e7eb';
+        const type = q.dataset.type, ans = q.dataset.answer;
+        let user='';
+        if (type==='single'||type==='tf') {
+          const c = q.querySelector('input[type=radio]:checked');
+          user = c ? c.value : '';
+        } else if (type==='multi') {
+          user = [...q.querySelectorAll('input[type=checkbox]:checked')]
+                  .map(i=>i.value).sort().join(',');
+        } else {
+          user = norm(q.querySelector('input[type=text]').value);
+        }
+        const expect = type==='text' ? norm(ans)
+                     : type==='multi'? ans.split(',').sort().join(',')
+                     : ans;
+        if (user===expect){ ok++; q.style.borderColor='#16a34a'; }
+        else              {        q.style.borderColor='#dc2626'; }
+      });
+      document.getElementById('result').textContent = `Điểm: ${ok}/${total}`;
+    }
+  
+    function resetAll(){
+      document.getElementById('result').textContent='';
+      form.querySelectorAll('input').forEach(i=>{
+        if(i.type==='radio'||i.type==='checkbox') i.checked=false;
+        if(i.type==='text') i.value='';
+      });
+      form.querySelectorAll('.q').forEach(q=>q.style.borderColor='#e5e7eb');
+    }
+  
+    // 5) Wire
+    picker.addEventListener('change', e=>loadTest(e.target.value));
+    document.getElementById('submit').addEventListener('click', grade);
+    document.getElementById('reset').addEventListener('click', resetAll);
+  
+    // mặc định
+    loadTest(picker.value);
+  })();
+  </script>
+  

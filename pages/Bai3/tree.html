@@ -1,0 +1,55 @@
+<div class="content bt3">
+    <h1>3.9 – Cây thư mục</h1>
+  
+    <ul id="tree" class="tree card">
+      <li class="open">
+        <span class="exp" title="Đóng/Mở"></span><span class="label selected">Root</span>
+        <ul>
+          <li>
+            <span class="leaf"></span><span class="label">Folder 1</span>
+          </li>
+          <li class="open">
+            <span class="exp" title="Đóng/Mở"></span><span class="label">Folder 2</span>
+            <ul>
+              <li><span class="leaf"></span><span class="label">Folder 2-1</span></li>
+              <li class="open">
+                <span class="exp" title="Đóng/Mở"></span><span class="label">Folder 2-2</span>
+                <ul>
+                  <li><span class="leaf"></span><span class="label">Folder 2-2-1</span></li>
+                  <li><span class="leaf"></span><span class="label">Folder 2-2-2</span></li>
+                </ul>
+              </li>
+              <li><span class="leaf"></span><span class="label">Folder 2-3</span></li>
+            </ul>
+          </li>
+          <li><span class="leaf"></span><span class="label">Folder 3</span></li>
+          <li><span class="leaf"></span><span class="label">Folder 4</span></li>
+          <li><span class="leaf"></span><span class="label">Folder 5</span></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  
+  <script>
+  (function () {
+    const tree = document.getElementById('tree');
+  
+    // toggle nút +/-
+    tree.addEventListener('click', (e) => {
+      const t = e.target;
+  
+      // mở/đóng khi bấm vào nút +/- hoặc vào nhãn có con
+      if (t.classList.contains('exp') || (t.classList.contains('label') && t.nextElementSibling?.tagName === 'UL')) {
+        const li = t.closest('li');
+        li.classList.toggle('open');
+      }
+  
+      // chọn node khi bấm nhãn
+      if (t.classList.contains('label')) {
+        tree.querySelectorAll('.label.selected').forEach(n => n.classList.remove('selected'));
+        t.classList.add('selected');
+      }
+    });
+  })();
+  </script>
+  
